@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<!-- 配置中文 -->
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<!-- 开发者模式 -->
+	<constant name="struts.devMode" value="true" />
+	<!-- 设置上传文件的最大值 -->
+	<constant name="struts.multipart.maxSize" value="10701096" />
+	
+	<!-- 不设置上传文件的临时文件夹，这时候默认的路径是在work\Catalina\localhost\dbManager -->
+	
+	<!-- 配置action由spring而不是由struts2装配 -->
+	<constant name="struts.objectFactory.spring.autoWire.alwaysRespect" value="true" />
+	
+    <!-- Add packages here -->
+    <package name="dbManager"  extends="struts-default">
+     	<action name="index">
+     		<result>index.jsp</result>
+     	</action>
+     	
+     	<action name="loginPage">
+     		<result>/WEB-INF/pages/login.jsp</result>
+     	</action>
+     	
+     	<action name="registerPage">
+     		<result>/WEB-INF/pages/register.jsp</result>
+     	</action>
+     	
+     	<action name="logout" class="com.hyatt.dbmanager.action.LogoutAction" method="logout">
+     		<result name="success" type="redirectAction">loginPage</result>
+     	</action>
+
+     	<action name="database" class="com.hyatt.dbmanager.action.DatabaseAction" method="showDatabaseInfo">
+     		<result name="success">/WEB-INF/pages/database.jsp</result>
+     		<result name="error" type="redirectAction">error</result>
+     	</action>
+     	
+     	<action name="recoverPage">
+     		<result>/WEB-INF/pages/recover.jsp</result>
+     	</action>
+     	
+     	<action name="error" class="com.hyatt.dbmanager.action.ErrorTransferAction" method="errorTransfer">
+     		<result name="success">/WEB-INF/pages/error.jsp</result>
+     	</action>
+     	
+     	
+     	<action name="success" class="com.hyatt.dbmanager.action.SuccessTransferAction" method="successTransfer">
+     		<result name="success">/WEB-INF/pages/success.jsp</result>
+     	</action>
+     	
+     	<action name="login" class="com.hyatt.dbmanager.action.LoginAction" method="login">
+     		<result name="success" type="redirectAction">databases</result>
+     		<result name="error" type="redirectAction">error</result>
+     	</action>
+     	
+     	<action name="register" class="com.hyatt.dbmanager.action.RegisterAction" method="register">
+     		<result name="success" type="redirectAction">success</result>
+     		<result name="error" type="redirectAction">error</result>
+     	</action>
+     	
+     	<action name="databases" class="com.hyatt.dbmanager.action.DatabaseAction" method="getDatabaseList">
+     		<result name="success">/WEB-INF/pages/databaselist.jsp</result>
+     	</action>
+     	
+     	<action name="userinfo" class="com.hyatt.dbmanager.action.UserInfoAction" method="getUserInfo">
+     		<result name="success">/WEB-INF/pages/userinfo.jsp</result>
+     	</action>	
+     	
+     	<action name="recover" class="com.hyatt.dbmanager.action.RecoverAction" method="recover">
+     		<result name="success" type="redirectAction">success</result>
+     		<result name="error" type="redirectAction">error</result>
+     	</action>
+     	
+     	<action name="download" class="com.hyatt.dbmanager.action.DownloadAction" method="download">  
+           <result name="success" type="stream">  
+               <param name="contentType">text/plain</param>  
+               <param name="contentDisposition">attachment;fileName="${fileName}"</param>  
+               <param name="inputName">downloadFile</param> 
+               <param name="bufferSize">1024</param>  
+           </result>  
+       </action> 
+       
+    </package>
+    
+    <package name="dbManager_json" extends="json-default" namespace="/">
+		<action name="createDBUser" class="com.hyatt.dbmanager.action.NewDBUserAction" method="createDBUser">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		<action name="createDatabase" class="com.hyatt.dbmanager.action.NewDatabaseAction" method="createDatabase">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		<action name="deleteDatabase" class="com.hyatt.dbmanager.action.DatabaseAction" method="deleteDatabase">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		<action name="backupDatabase" class="com.hyatt.dbmanager.action.DatabaseAction" method="backupDatabase">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		
+	</package>
+
+	<package name="default" extends="struts-default">
+		<default-action-ref name="notFound" />
+		<action name="notFound">
+			<result type="redirectAction">404</result>
+		</action>
+		
+		<action name="404">
+			<result>/WEB-INF/pages/404.jsp</result>
+		</action>
+	</package>
+</struts>

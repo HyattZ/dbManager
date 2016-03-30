@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databases>
+	<database>
+		<ip>172.29.152.181</ip>
+		<port>3306</port>
+		<user>root</user>
+		<password>hitnslab</password>
+	</database>
+</databases>
